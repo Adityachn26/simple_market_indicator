@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Market Data Dashboard</title>
+    <!-- Use Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <header class="app-header">
+            <h1>Market Pulse <span class="badge">Live</span></h1>
+            <p>Real-Time Technical Analysis Dashboard</p>
+        </header>
+
+        <section class="controls-section glass-panel">
+            <div class="control-group">
+                <label for="tickerInput">Ticker Symbol</label>
+                <input type="text" id="tickerInput" value="AAPL" placeholder="e.g. AAPL, BTC-USD, TSLA" />
+            </div>
+            
+            <div class="control-group indicators-group">
+                <label>Technical Indicators</label>
+                <div class="checkbox-group">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ind-sma" value="sma"> SMA (20)
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ind-ema" value="ema"> EMA (20)
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ind-bb" value="bb"> Bollinger Bands
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ind-macd" value="macd"> MACD
+                        <span class="checkmark"></span>
+                    </label>
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="ind-rsi" value="rsi"> RSI
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="control-group actions-group">
+                <button id="fetchBtn" class="primary-btn">
+                    <span id="btnText">Fetch Data</span>
+                    <span id="spinner" class="spinner hidden"></span>
+                </button>
+                <div class="toggle-group">
+                    <label class="switch">
+                        <input type="checkbox" id="autoRefresh" checked>
+                        <span class="slider round"></span>
+                    </label>
+                    <span class="toggle-label">Auto Refresh (10s)</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="chart-section glass-panel">
+            <div id="priceChart" class="chart-container"></div>
+        </section>
+        
+        <section class="chart-section glass-panel">
+             <div id="oscillatorChart" class="chart-container" style="height: 300px; display: none;"></div>
+        </section>
+    </div>
+
+    <script src="/script.js"></script>
+</body>
+</html>
