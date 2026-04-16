@@ -4,6 +4,7 @@ from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import pandas as pd
+import numpy as np
 
 from backend.data_fetcher import fetch_market_data
 from backend.indicators import (
@@ -49,11 +50,24 @@ def get_data(ticker: str = Query(..., description="Ticker symbol, e.g., AAPL"),
             if "rsi" in ind_list:
                 df = calculate_rsi(df, window=14)
                 
-        # Handle JSON serialization of NaN values
-        df = df.where(pd.notnull(df), None)
+        # Handle infinities
+        df = df.replace([np.inf, -np.inf], np.nan)
         
+        # Convert to dictionary
         records = df.to_dict(orient="records")
-        return {"ticker": ticker.upper(), "data": records}
+        
+        # Manually safely replace NaN with None for valid JSON serialization
+        cleaned_records = []
+        for r in records:
+            clean_dict = {}
+            for k, v in r.items():
+                if pd.isna(v):
+                    clean_dict[k] = None
+                else:
+                    clean_dict[k] = v
+            cleaned_records.append(clean_dict)
+            
+        return {"ticker": ticker.upper(), "data": cleaned_records}
         
     except ValueError as e:
         raise HTTPException(status_code=404, detail=str(e))
